@@ -1,17 +1,24 @@
 package com.rsschool.android2021
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.google.android.material.textfield.TextInputEditText
+
 
 class FirstFragment : Fragment() {
 
     private var generateButton: Button? = null
     private var previousResult: TextView? = null
+    private var editMin: EditText? = null
+    private var editMax: EditText? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,15 +32,26 @@ class FirstFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         previousResult = view.findViewById(R.id.previous_result)
         generateButton = view.findViewById(R.id.generate)
+        editMin = view.findViewById(R.id.min_value)
+        editMax = view.findViewById(R.id.max_value)
 
         val result = arguments?.getInt(PREVIOUS_RESULT_KEY)
         previousResult?.text = "Previous result: ${result.toString()}"
 
-        // TODO: val min = ...
-        // TODO: val max = ...
-
         generateButton?.setOnClickListener {
-            // TODO: send min and max to the SecondFragment
+            val intf = activity as FragmentsInterface
+            val min = editMin?.text.toString().toIntOrNull()
+            val max = editMax?.text.toString().toIntOrNull()
+
+            if ((min != null) && (max != null)) {
+                if (min < max) {
+                    intf.openSecond(min, max)
+                } else {
+                    Toast.makeText(activity, "Please input min and max values where min < max", Toast.LENGTH_LONG ).show()
+                }
+            } else {
+                Toast.makeText(activity, "Please input min and max values as integer numbers", Toast.LENGTH_LONG ).show()
+            }
         }
     }
 
