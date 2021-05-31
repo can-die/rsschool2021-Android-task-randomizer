@@ -1,18 +1,29 @@
 package com.rsschool.android2021
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import kotlin.random.Random
+
 
 class SecondFragment : Fragment() {
 
     private var backButton: Button? = null
     private var result: TextView? = null
+
+    private val backCallback: OnBackPressedCallback = object : OnBackPressedCallback(
+        true
+    ) {
+        override fun handleOnBackPressed() {
+            doBack()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,6 +46,19 @@ class SecondFragment : Fragment() {
         backButton?.setOnClickListener {
             doBack()
         }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        requireActivity().onBackPressedDispatcher.addCallback(
+            this,
+            backCallback
+        )
+    }
+
+    override fun onDetach() {
+        backCallback.remove()
+        super.onDetach()
     }
 
     private fun generate(min: Int, max: Int): Int {

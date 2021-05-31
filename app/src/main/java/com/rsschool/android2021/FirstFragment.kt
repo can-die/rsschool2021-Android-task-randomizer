@@ -44,13 +44,15 @@ class FirstFragment : Fragment() {
             val max = editMax?.text.toString().toIntOrNull()
 
             if ((min != null) && (max != null)) {
-                if (min < max) {
-                    intf.openSecond(min, max)
+                if ((min < 0) || (max < 0)){
+                    Toast.makeText(activity, "Please enter Min and Max values as integer non-negative numbers", Toast.LENGTH_LONG ).show()
+                } else if (min > max) {
+                    Toast.makeText(activity, "Please enter Min and Max values where Min is less or equals Max", Toast.LENGTH_LONG ).show()
                 } else {
-                    Toast.makeText(activity, "Please input min and max values where min < max", Toast.LENGTH_LONG ).show()
+                    intf.openSecond(min, max)
                 }
             } else {
-                Toast.makeText(activity, "Please input min and max values as integer numbers", Toast.LENGTH_LONG ).show()
+                Toast.makeText(activity, "Please enter Min and Max values as integer non-negative numbers", Toast.LENGTH_LONG ).show()
             }
         }
     }
